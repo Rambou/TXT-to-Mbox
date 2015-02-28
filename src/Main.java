@@ -101,7 +101,7 @@ public class Main {
                     } else if (line.contains("From:")) {
                         _from = line;
                     } else if (line.contains("Subject:")) {
-                        Subject = line;
+                        Subject = "Subject:" + line.split("Subject:")[1];
                     } else if (line.contains("To:")) {
                         to = line;
                     } else {

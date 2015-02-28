@@ -62,12 +62,13 @@ public class Main {
                 mboxfile = new File(System.getProperty("user.dir") + "\\" + Args[1]);
             } else {
                 mboxfile = new File(System.getProperty("user.dir") + "\\All_mails.mbox");
+
+                //If file exist then gets deleted
+                if (mboxfile.exists()) {
+                    mboxfile.delete();
+                }
             }
 
-            //If file exist then gets deleted
-            if (mboxfile.exists()) {
-                mboxfile.delete();
-            }
             //File is created
             mboxfile.createNewFile();
         } catch (IOException ex) {

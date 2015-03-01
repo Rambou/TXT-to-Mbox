@@ -35,8 +35,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,8 +106,12 @@ public class Main {
                 _from += line.split(":")[1];
                 From += line.split(":")[1];
                 line = br.readLine();
-                Date = line.split(":")[1] + ":" + line.split(":")[2];
-                System.out.println(Date);
+                Date = (line.split(":")[1] + ":" + line.split(":")[2]).trim();
+                //Setting the correct format for date
+                DateFormat USER_DF_TIME = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+                        DateFormat.SHORT);
+                Date = USER_DF_TIME.parse(Date).toString();
+                
                 line = br.readLine();
                 To += line.split(":")[1];
                 line = br.readLine();

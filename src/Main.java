@@ -81,11 +81,11 @@ public class Main {
 
         for (File f : Files) {
 
-            String _from = null,
-                    From = "From MAILER-DAEMON",
+            String _from = "From: ",
+                    From = "From ",
                     Date = null,
-                    to = null,
-                    Subject = null,
+                    To = "To: ",
+                    Subject = "Subject: ",
                     Body = null,
                     ContentType = "Content-Type: text/plain; charset=utf-8",
                     ContentTransferEncoding = "Content-Transfer-Encoding: base64";
@@ -96,19 +96,21 @@ public class Main {
                 StringBuilder sb = new StringBuilder();
                 String line = br.readLine();
 
+                Subject += line.split(":")[1];
+                line = br.readLine();
+                _from += line.split(":")[1];
+                From += line.split(":")[1];
+                line = br.readLine();
+                Date = line.split(":")[1] + ":" + line.split(":")[2];
+                System.out.println(Date);
+                line = br.readLine();
+                To += line.split(":")[1];
+                line = br.readLine();
+
                 while (line != null) {
-                    if (line.contains("Date:")) {
-                        Date = line.replace("Date:", "").trim();
-                    } else if (line.contains("From:")) {
-                        _from = line;
-                    } else if (line.contains("Subject:")) {
-                        Subject = "Subject:" + line.split("Subject:")[1];
-                    } else if (line.contains("To:")) {
-                        to = line;
-                    } else {
-                        sb.append(line);
-                        sb.append(System.lineSeparator());
-                    }
+                    sb.append(line);
+                    sb.append(System.lineSeparator());
+
                     line = br.readLine();
                 }
                 //Convert body in base64 using UTF-8 charset
@@ -124,20 +126,20 @@ public class Main {
                 OutputStreamWriter writer = new OutputStreamWriter(
                         new FileOutputStream(mboxfile, true));
                 BufferedWriter fbw = new BufferedWriter(writer);
-                fbw.write(From + " " + Date);
+                fbw.append(From + " " + Date);
                 fbw.newLine();
-                fbw.write(_from);
+                fbw.append(_from);
                 fbw.newLine();
-                fbw.write(to);
+                fbw.append(To);
                 fbw.newLine();
-                fbw.write(Subject);
+                fbw.append(Subject);
                 fbw.newLine();
-                fbw.write(ContentType);
+                fbw.append(ContentType);
                 fbw.newLine();
-                fbw.write(ContentTransferEncoding);
+                fbw.append(ContentTransferEncoding);
                 fbw.newLine();
                 fbw.newLine();
-                fbw.write(Body);
+                fbw.append(Body);
                 fbw.newLine();
                 fbw.newLine();
                 fbw.close();

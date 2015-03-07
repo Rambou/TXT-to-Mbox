@@ -5,4 +5,4 @@ Story: I was trying to find an application to convert my .txt mail files into .m
 
 That's all folks, if anyone is interested feel free to contribute.
 
-Using: java -jar txt_to_mbox.jar <FOLDER_OF_TXTs> <OPTIONAL NAME_OF_MBOX>
+Using: java -jar txt_to_mbox.jar FOLDER_OF_TXT OPTIONAL_NAME_OF_MBOX

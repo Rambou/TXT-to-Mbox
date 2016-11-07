@@ -26,14 +26,8 @@
  *
  * @author Nikolaos Bousios (Rambou)
  */
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -60,9 +54,9 @@ public class Main {
         try {
             //Checking if user has given the mbox file name
             if (Args.length > 1) {
-                mboxfile = new File(System.getProperty("user.dir") + "\\" + Args[1]);
+                mboxfile = new File(Args[1]);
             } else {
-                mboxfile = new File(System.getProperty("user.dir") + "\\All_mails.mbox");
+                mboxfile = new File("test/All_mails.mbox");
 
                 //If file exist then gets deleted
                 if (mboxfile.exists()) {
@@ -84,7 +78,7 @@ public class Main {
 
             String _from = "From: ",
                     From = "From ",
-                    Date = null,
+                    Date = "Date",
                     To = "To: ",
                     Subject = "Subject: ",
                     Body = null,
@@ -95,29 +89,27 @@ public class Main {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(
                     new FileInputStream(f), "UTF8"))) {
                 StringBuilder sb = new StringBuilder();
-                String line = br.readLine();
-
-                Subject += line.split(":")[1];
-                line = br.readLine();
-                _from += line.split(":")[1];
-                From += line.split(":")[1];
-                line = br.readLine();
-                Date = (line.split(":")[1] + ":" + line.split(":")[2]).trim();
-                //Setting the correct format for date
-                DateFormat USER_DF_TIME = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-                        DateFormat.SHORT);
-                Date = USER_DF_TIME.parse(Date).toString();
-                
-                line = br.readLine();
-                To += line.split(":")[1];
-                line = br.readLine();
-
-                while (line != null) {
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-
-                    line = br.readLine();
+                for (String line = br.readLine(); line != null; line = br.readLine()) {
+                    if (line.contains(_from)) {
+                        _from += line.split(":")[1];
+                        From += line.split(":")[1];
+                    } else if (line.contains(Date)) {
+                        Date = (line.split(":")[1] + ":" + line.split(":")[2]).trim();
+                        //Setting the correct format for date
+                        DateFormat USER_DF_TIME = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+                                DateFormat.SHORT);
+                        Date = USER_DF_TIME.parse(Date).toString();
+                    } else if (line.contains(To)) {
+                        To += line.split(":")[1];
+                    } else if (line.contains(Subject)) {
+                        Subject += line.split(":")[1];
+                    } else {
+                        sb.append(line);
+                        sb.append(System.lineSeparator());
+                    }
                 }
+                br.close();
+
                 //Convert body in base64 using UTF-8 charset
                 Body = Base64.getEncoder().encodeToString(sb.toString().getBytes(StandardCharsets.UTF_8));
 

@@ -1,0 +1,8 @@
+From: Mark Smith marksmith@gmail.com
+To: John Doe johndoe@gmail.com
+Subject: Greetings
+Date: 04/05/1990 10:30 PM
+
+Hello.
+World
+This is a test email.
